@@ -39,6 +39,8 @@
   .nav-links a { font-size: 12px; letter-spacing: .12em; color: var(--espresso); text-decoration: none; text-transform: uppercase; position: relative; }
   .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 100%; height: 0.5px; background: var(--caramel); transition: right .35s; }
   .nav-links a:hover::after { right: 0; }
+  .nav-instagram { display: flex; align-items: center; gap: 6px; font-size: 12px; letter-spacing: .08em; color: var(--caramel); text-decoration: none; transition: color .2s; }
+  .nav-instagram:hover { color: var(--espresso); }
   .nav-order { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--cream); background: var(--espresso); padding: 10px 24px; border: none; cursor: none; text-decoration: none; transition: background .3s; }
   .nav-order:hover { background: var(--caramel); }
 
@@ -158,7 +160,13 @@
   .footer-links a:hover { color: var(--cream); }
   .footer-contact { text-align: right; }
   .footer-contact p { font-size: 12px; color: var(--caramel); line-height: 1.9; letter-spacing: .04em; }
-  .footer-contact a { color: var(--latte); text-decoration: none; }
+  .footer-contact a { color: var(--latte); text-decoration: none; transition: color .2s; }
+  .footer-contact a:hover { color: var(--cream); }
+  .social-links { display: flex; gap: 16px; margin-top: 12px; }
+  .social-link { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--latte); text-decoration: none; letter-spacing: .04em; transition: color .2s; }
+  .social-link:hover { color: var(--cream); }
+  .social-icon { width: 32px; height: 32px; border: 0.5px solid rgba(196,168,130,.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: border-color .2s; }
+  .social-link:hover .social-icon { border-color: var(--latte); }
   .footer-bottom { background: var(--espresso); border-top: 0.5px solid rgba(196,168,130,.12); padding: 18px 64px; text-align: center; font-size: 11px; color: rgba(196,168,130,.45); letter-spacing: .08em; }
 
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
@@ -293,6 +301,12 @@
     <li><a href="#about" data-ru="О нас" data-uz="Biz haqimizda">О нас</a></li>
     <li><a href="#process" data-ru="Как заказать" data-uz="Buyurtma qilish">Как заказать</a></li>
   </ul>
+  <a href="https://www.instagram.com/vau.desserts" target="_blank" class="nav-instagram">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+    </svg>
+    @vau.desserts
+  </a>
   <a href="#order" class="nav-order" data-ru="Заказать" data-uz="Buyurtma">Заказать</a>
 </nav>
 
@@ -385,7 +399,7 @@
     <p class="about-desc reveal d2" data-ru="Мы не делаем всё подряд. VAU — единственный в Ташкенте бренд, который специализируется исключительно на муссовых тортах и десертах. Каждое изделие — это часы работы, которые почти не видно." data-uz="Biz hamma narsani yasaymiz deya da'vo qilmaymiz. VAU — Toshkentda faqat muss tortlar va desertlarga ixtisoslashgan yagona brend. Har bir mahsulot — ko'rinmas soatlik mehnat natijasidir.">Мы не делаем всё подряд. VAU — единственный в Ташкенте бренд, который специализируется исключительно на муссовых тортах и десертах.</p>
     <div class="about-stats reveal d3">
       <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label" data-ru="Ручная работа" data-uz="Qo'l ishi">Ручная работа</div></div>
-      <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label" data-ru="Лет опыта" data-uz="Yillik tajriba">Лет опыта</div></div>
+      <div class="stat-item"><div class="stat-num">2+</div><div class="stat-label" data-ru="Года опыта" data-uz="Yillik tajriba">Года опыта</div></div>
       <div class="stat-item"><div class="stat-num">8+</div><div class="stat-label" data-ru="Вкусов в меню" data-uz="Ta'm turi">Вкусов в меню</div></div>
       <div class="stat-item"><div class="stat-num">1</div><div class="stat-label" data-ru="Специализация" data-uz="Ixtisoslik">Специализация</div></div>
     </div>
@@ -404,7 +418,7 @@
   </div>
   <div class="process-steps reveal d2">
     <div class="step"><span class="step-num">01</span><div><div class="step-title" data-ru="Выберите десерт" data-uz="Desertni tanlang">Выберите десерт</div><div class="step-desc" data-ru="Откройте меню и выберите вкус — или доверьтесь нам." data-uz="Menuni oching va ta'mni tanlang — yoki bizga ishoning.">Откройте меню и выберите вкус — или доверьтесь нам.</div></div></div>
-    <div class="step"><span class="step-num">02</span><div><div class="step-title" data-ru="Оформите заказ" data-uz="Buyurtma bering">Оформите заказ</div><div class="step-desc" data-ru="Заполните форму на сайте или напишите в Instagram — @vau.uz" data-uz="Saytdagi formani to'ldiring yoki Instagramga yozing — @vau.uz">Заполните форму на сайте или напишите в Instagram — @vau.uz</div></div></div>
+    <div class="step"><span class="step-num">02</span><div><div class="step-title" data-ru="Оформите заказ" data-uz="Buyurtma bering">Оформите заказ</div><div class="step-desc" data-ru="Заполните форму на сайте или напишите в Instagram — @vaudessert.uz" data-uz="Saytdagi formani to'ldiring yoki Instagramga yozing — @vaudessert.uz">Заполните форму на сайте или напишите в Instagram — @vaudessert.uz</div></div></div>
     <div class="step"><span class="step-num">03</span><div><div class="step-title" data-ru="Подтверждение" data-uz="Tasdiqlash">Подтверждение</div><div class="step-desc" data-ru="Мы свяжемся в течение часа и согласуем время доставки." data-uz="Bir soat ichida bog'lanib, yetkazib berish vaqtini kelishib olamiz.">Мы свяжемся в течение часа и согласуем время доставки.</div></div></div>
     <div class="step"><span class="step-num">04</span><div><div class="step-title" data-ru="Получите и наслаждайтесь" data-uz="Qabul qiling va bahring">Получите и наслаждайтесь</div><div class="step-desc" data-ru="Курьер доставит в удобное время. Десерт готов к подаче." data-uz="Kuryer qulay vaqtda yetkazib beradi. Desert tortiqqa tayyor.">Курьер доставит в удобное время. Десерт готов к подаче.</div></div></div>
   </div>
@@ -566,12 +580,12 @@
     <a href="#order" data-ru="Оформить заказ" data-uz="Buyurtma berish">Оформить заказ</a>
   </div>
   <div class="footer-contact">
-    <p>Instagram: <a href="#">@vau.uz</a><br>Telegram: <a href="#">@vau_tashkent</a><br>
+    <p>Instagram: <a href="#">@vaudessert.uz</a><br>Telegram: <a href="https://t.me/vau_tashkent" target="_blank">@vau_tashkent</a><br>
     <span data-ru="Ташкент, доставка по городу" data-uz="Toshkent, shahar bo'ylab yetkazib berish">Ташкент, доставка по городу</span></p>
   </div>
 </footer>
 <div class="footer-bottom">
-  <span data-ru="© 2026 VAU · Муссовые торты и десерты · Ташкент" data-uz="© 2026 VAU · Muss tortlar va desertlar · Toshkent">© 2026 VAU · Муссовые торты и десерты · Ташкент</span>
+  <span data-ru="© 2025 VAU · Муссовые торты и десерты · Ташкент" data-uz="© 2025 VAU · Muss tortlar va desertlar · Toshkent">© 2025 VAU · Муссовые торты и десерты · Ташкент</span>
 </div>
 
 <script>
