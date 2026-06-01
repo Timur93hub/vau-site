@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VAU — Муссовые торты и десерты · Ташкент</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --espresso: #2C1F14;
+    --caramel: #9A7D5C;
+    --latte: #C4A882;
+    --almond: #E8D8C4;
+    --cream: #FAF7F2;
+    --beige: #F2EAE0;
+    --terra: #C8877A;
+    /* ─── НАСТРОЙКИ TELEGRAM ─── */
+    /* Замени на свои значения после настройки бота */
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--espresso); font-family: 'Jost', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--espresso); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid var(--caramel); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: transform .15s ease-out, width .3s, height .3s; }
+
+  .lang-switch { position: fixed; top: 24px; right: 160px; z-index: 200; display: flex; border: 0.5px solid var(--latte); overflow: hidden; }
+  .lang-btn { font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 8px 16px; border: none; cursor: none; transition: background .25s, color .25s; background: transparent; color: var(--caramel); }
+  .lang-btn.active { background: var(--espresso); color: var(--cream); }
+  .lang-btn:not(.active):hover { background: var(--almond); color: var(--espresso); }
+  .lang-divider { width: 0.5px; background: var(--latte); }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 24px 48px; display: flex; align-items: center; justify-content: space-between; transition: background .4s, padding .4s; }
+  nav.scrolled { background: rgba(250,247,242,0.94); backdrop-filter: blur(12px); padding: 14px 48px; border-bottom: 0.5px solid var(--almond); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; letter-spacing: .22em; color: var(--espresso); text-decoration: none; }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { font-size: 12px; letter-spacing: .12em; color: var(--espresso); text-decoration: none; text-transform: uppercase; position: relative; }
+  .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 100%; height: 0.5px; background: var(--caramel); transition: right .35s; }
+  .nav-links a:hover::after { right: 0; }
+  .nav-order { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--cream); background: var(--espresso); padding: 10px 24px; border: none; cursor: none; text-decoration: none; transition: background .3s; }
+  .nav-order:hover { background: var(--caramel); }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 120px 64px 80px; z-index: 2; position: relative; }
+  .hero-tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--caramel); margin-bottom: 32px; opacity: 0; animation: fadeUp .8s .2s forwards; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(68px, 8.5vw, 116px); font-weight: 300; line-height: .92; opacity: 0; animation: fadeUp .9s .4s forwards; }
+  .hero-title em { font-style: italic; color: var(--caramel); }
+  .hero-divider { width: 48px; height: 0.5px; background: var(--latte); margin: 40px 0; opacity: 0; animation: fadeUp .8s .6s forwards; }
+  .hero-desc { font-size: 15px; line-height: 1.8; color: var(--caramel); max-width: 360px; opacity: 0; animation: fadeUp .8s .7s forwards; }
+  .hero-cta { margin-top: 48px; display: flex; gap: 16px; align-items: center; opacity: 0; animation: fadeUp .8s .9s forwards; }
+  .btn-primary { font-family: 'Jost', sans-serif; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--cream); background: var(--espresso); padding: 14px 36px; border: none; cursor: none; text-decoration: none; transition: background .3s, transform .2s; display: inline-block; }
+  .btn-primary:hover { background: var(--caramel); transform: translateY(-1px); }
+  .btn-ghost { font-size: 12px; letter-spacing: .08em; color: var(--caramel); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+  .btn-ghost svg { transition: transform .3s; }
+  .btn-ghost:hover svg { transform: translateX(4px); }
+  .hero-badges { position: absolute; bottom: 48px; left: 64px; display: flex; gap: 12px; opacity: 0; animation: fadeUp .8s 1.1s forwards; }
+  .badge { font-size: 11px; letter-spacing: .08em; color: var(--caramel); border: 0.5px solid var(--latte); padding: 6px 14px; background: rgba(250,247,242,.85); backdrop-filter: blur(4px); }
+  .hero-right { position: relative; overflow: hidden; background: var(--beige); }
+  .hero-bg-pattern { position: absolute; inset: 0; background-image: radial-gradient(circle at 30% 50%, rgba(196,168,130,.15) 0%, transparent 60%), radial-gradient(circle at 80% 20%, rgba(200,135,122,.1) 0%, transparent 50%); }
+  .hc1 { position: absolute; width: 340px; height: 340px; background: var(--almond); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%,-50%); animation: floatSlow 6s ease-in-out infinite; }
+  .hc2 { position: absolute; width: 120px; height: 120px; background: var(--latte); border-radius: 50%; top: 20%; right: 15%; animation: floatSlow 8s ease-in-out infinite reverse; opacity: .6; }
+  .hc3 { position: absolute; width: 60px; height: 60px; background: var(--terra); border-radius: 50%; bottom: 25%; left: 20%; animation: floatSlow 5s ease-in-out infinite; opacity: .4; }
+  .hero-vau { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Cormorant Garamond', serif; font-size: 140px; font-weight: 300; color: var(--espresso); opacity: .07; user-select: none; animation: floatSlow 7s ease-in-out infinite; z-index: 2; }
+
+  .marquee-wrap { background: var(--espresso); padding: 18px 0; overflow: hidden; white-space: nowrap; }
+  .marquee-track { display: inline-flex; animation: marquee 22s linear infinite; }
+  .marquee-item { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--latte); padding: 0 36px; }
+  .marquee-dot { color: var(--terra); padding: 0 6px; }
+
+  section { padding: 120px 64px; }
+  .section-tag { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--caramel); margin-bottom: 20px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px,5vw,60px); font-weight: 300; line-height: 1.1; color: var(--espresso); margin-bottom: 24px; }
+  .section-title em { font-style: italic; color: var(--caramel); }
+
+  .products { background: var(--cream); }
+  .products-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 64px; }
+  .products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+  .product-card { position: relative; aspect-ratio: 3/4; overflow: hidden; cursor: none; }
+  .product-card:nth-child(1){background:#EDE0D4;} .product-card:nth-child(2){background:var(--almond);} .product-card:nth-child(3){background:#D8E4D0;} .product-card:nth-child(4){background:#EAD4D0;} .product-card:nth-child(5){background:var(--beige);} .product-card:nth-child(6){background:#E4DCD0;}
+  .product-bg { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .pc { border-radius: 50%; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .product-card:hover .pc { transform: scale(1.09); }
+  .product-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(44,31,20,.88) 0%, transparent 52%); opacity: 0; transition: opacity .4s; }
+  .product-card:hover .product-overlay { opacity: 1; }
+  .product-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 28px 24px; transform: translateY(6px); transition: transform .4s cubic-bezier(.16,1,.3,1); }
+  .product-card:hover .product-info { transform: translateY(0); }
+  .product-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 300; color: var(--cream); margin-bottom: 4px; opacity: 0; transition: opacity .4s .04s; }
+  .product-card:hover .product-name { opacity: 1; }
+  .product-flavour { font-size: 12px; letter-spacing: .06em; color: var(--latte); opacity: 0; transition: opacity .4s .08s; }
+  .product-card:hover .product-flavour { opacity: 1; }
+  .product-price { position: absolute; top: 18px; right: 18px; font-size: 11px; letter-spacing: .1em; color: var(--espresso); background: rgba(250,247,242,.92); padding: 5px 12px; backdrop-filter: blur(4px); }
+
+  .about { background: var(--espresso); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about .section-title { color: var(--cream); } .about .section-tag { color: var(--latte); }
+  .about-desc { font-size: 16px; line-height: 1.9; color: var(--latte); margin-bottom: 32px; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .stat-item { border-top: 0.5px solid rgba(196,168,130,.3); padding-top: 18px; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--latte); line-height: 1; }
+  .stat-label { font-size: 12px; letter-spacing: .06em; color: var(--caramel); margin-top: 4px; }
+  .about-visual { position: relative; height: 480px; display: flex; align-items: center; justify-content: center; }
+  .about-ring { position: absolute; border: 0.5px solid rgba(196,168,130,.3); border-radius: 50%; animation: rotateSlow linear infinite; }
+  .r1{width:320px;height:320px;animation-duration:30s;} .r2{width:240px;height:240px;animation-duration:20s;animation-direction:reverse;} .r3{width:160px;height:160px;animation-duration:15s;}
+  .about-center { width: 80px; height: 80px; background: var(--latte); border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 2; }
+  .about-center span { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: var(--espresso); letter-spacing: .1em; }
+
+  .process { background: var(--beige); display: grid; grid-template-columns: 1fr 2fr; gap: 80px; align-items: start; }
+  .process-steps { display: flex; flex-direction: column; }
+  .step { display: grid; grid-template-columns: 48px 1fr; gap: 24px; padding: 28px 0; border-bottom: 0.5px solid var(--almond); opacity: .4; transition: opacity .3s; }
+  .step:first-child { border-top: 0.5px solid var(--almond); }
+  .step:hover { opacity: 1; }
+  .step-num { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--caramel); padding-top: 2px; }
+  .step-title { font-size: 14px; font-weight: 400; color: var(--espresso); margin-bottom: 5px; }
+  .step-desc { font-size: 13px; color: var(--caramel); line-height: 1.7; }
+
+  /* ORDER SECTION */
+  .order-section { background: var(--espresso); padding: 120px 64px; }
+  .order-inner { max-width: 760px; margin: 0 auto; }
+  .order-section .section-tag { color: var(--latte); }
+  .order-section .section-title { color: var(--cream); margin-bottom: 48px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 7px; }
+  .form-group.full { grid-column: 1/-1; }
+  .form-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--latte); }
+  .form-input, .form-select, .form-textarea { background: rgba(255,255,255,.05); border: 0.5px solid rgba(196,168,130,.3); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 14px; font-weight: 300; padding: 13px 16px; outline: none; transition: border-color .3s, background .3s; cursor: none; width: 100%; appearance: none; }
+  .form-input::placeholder { color: rgba(196,168,130,.4); }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--latte); background: rgba(255,255,255,.08); }
+  .form-select option { background: var(--espresso); color: var(--cream); }
+  .form-textarea { resize: vertical; min-height: 90px; }
+  .form-submit { width: 100%; background: var(--latte); border: none; color: var(--espresso); font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; padding: 18px; cursor: none; margin-top: 6px; transition: background .3s; position: relative; overflow: hidden; }
+  .form-submit::before { content: ''; position: absolute; inset: 0; background: var(--terra); transform: translateX(-100%); transition: transform .4s cubic-bezier(.16,1,.3,1); }
+  .form-submit:hover::before { transform: translateX(0); }
+  .form-submit span { position: relative; z-index: 1; }
+  .form-submit:disabled { opacity: .6; cursor: not-allowed; }
+  .form-note { text-align: center; font-size: 12px; color: var(--caramel); margin-top: 14px; letter-spacing: .04em; }
+
+  /* STATUS STATES */
+  .form-status { display: none; text-align: center; padding: 48px 32px; border: 0.5px solid var(--latte); }
+  .form-status.show { display: block; }
+  .status-icon { font-size: 40px; margin-bottom: 16px; }
+  .status-title { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300; color: var(--cream); margin-bottom: 10px; }
+  .status-desc { font-size: 14px; color: var(--latte); line-height: 1.7; }
+  .status-error .status-title { color: var(--terra); }
+
+  /* SETUP BANNER */
+  .setup-banner { background: rgba(200,135,122,.12); border: 0.5px solid var(--terra); padding: 16px 20px; margin-bottom: 28px; display: flex; gap: 12px; align-items: flex-start; }
+  .setup-banner-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .setup-banner-text { font-size: 13px; color: var(--latte); line-height: 1.6; }
+  .setup-banner-text strong { color: var(--cream); font-weight: 400; }
+  .setup-banner-text code { background: rgba(255,255,255,.08); padding: 1px 6px; font-size: 12px; color: var(--latte); font-family: monospace; }
+
+  footer { background: var(--espresso); border-top: 0.5px solid rgba(196,168,130,.2); padding: 48px 64px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; align-items: center; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 300; letter-spacing: .2em; color: var(--cream); }
+  .footer-tagline { font-size: 11px; letter-spacing: .1em; color: var(--caramel); margin-top: 4px; }
+  .footer-links { display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { font-size: 12px; letter-spacing: .06em; color: var(--latte); text-decoration: none; transition: color .2s; }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-contact { text-align: right; }
+  .footer-contact p { font-size: 12px; color: var(--caramel); line-height: 1.9; letter-spacing: .04em; }
+  .footer-contact a { color: var(--latte); text-decoration: none; }
+  .footer-bottom { background: var(--espresso); border-top: 0.5px solid rgba(196,168,130,.12); padding: 18px 64px; text-align: center; font-size: 11px; color: rgba(196,168,130,.45); letter-spacing: .08em; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .d1{transition-delay:.1s;} .d2{transition-delay:.2s;} .d3{transition-delay:.3s;}
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes floatSlow { 0%,100%{transform:translate(-50%,-50%) translateY(0)} 50%{transform:translate(-50%,-50%) translateY(-16px)} }
+  @keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  @media (max-width:900px) {
+    /* NAV — фиксированная полоска на всю ширину */
+    nav {
+      padding: 0 16px;
+      height: 56px;
+      background: rgba(250,247,242,0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--almond);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    nav.scrolled { padding: 0 16px; height: 56px; }
+    .nav-logo { font-size: 22px; letter-spacing: .18em; flex-shrink: 0; }
+    .nav-links { display: none; }
+
+    /* LANG SWITCH — фиксированный, виден поверх всего */
+    .lang-switch {
+      position: fixed;
+      top: 12px;
+      right: 100px;
+      z-index: 200;
+      border: 0.5px solid var(--almond);
+      background: rgba(250,247,242,0.97);
+    }
+    .lang-btn { padding: 6px 11px; font-size: 10px; }
+
+    /* NAV ORDER — компактная кнопка */
+    .nav-order {
+      position: fixed;
+      top: 8px;
+      right: 12px;
+      padding: 9px 14px;
+      font-size: 10px;
+      letter-spacing: .08em;
+      white-space: nowrap;
+      flex-shrink: 0;
+      z-index: 200;
+    }
+
+    /* HERO */
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 80px 20px 48px; }
+    .hero-right { height: 240px; }
+    .hero-badges {
+      left: 20px; bottom: 20px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .badge { font-size: 10px; padding: 5px 10px; }
+
+    /* CTA кнопки — стек на мобиле */
+    .hero-cta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 14px;
+      margin-top: 32px;
+    }
+    .btn-primary {
+      padding: 14px 28px;
+      font-size: 11px;
+      width: auto;
+    }
+    .btn-ghost {
+      font-size: 13px;
+    }
+
+    /* SECTIONS */
+    section { padding: 64px 20px; }
+    .about,.process { grid-template-columns: 1fr; gap: 40px; }
+    .about-visual { height: 240px; }
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .order-section { padding: 64px 20px; }
+    footer { grid-template-columns: 1fr; padding: 40px 20px; }
+    .footer-contact { text-align: left; }
+    .footer-bottom { padding: 16px 20px; }
+    body { cursor: auto; }
+    .cursor,.cursor-ring { display: none; }
+  }
+
+  /* ─── КАЛЬКУЛЯТОР ─── */
+  .calc-section { margin-bottom: 28px; }
+  .calc-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--latte); margin-bottom: 14px; display: block; }
+  .calc-items { display: flex; flex-direction: column; gap: 8px; }
+  .calc-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: rgba(255,255,255,.04); border: 0.5px solid rgba(196,168,130,.2); transition: border-color .3s; }
+  .calc-item.active { border-color: var(--latte); background: rgba(255,255,255,.08); }
+  .calc-item-info { flex: 1; }
+  .calc-item-name { font-size: 14px; color: var(--cream); font-weight: 300; }
+  .calc-item-desc { font-size: 11px; color: var(--caramel); margin-top: 2px; }
+  .calc-item-price { font-size: 12px; color: var(--latte); margin-right: 16px; white-space: nowrap; }
+  .calc-qty { display: flex; align-items: center; gap: 8px; }
+  .calc-btn { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid rgba(196,168,130,.4); background: transparent; color: var(--latte); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s, border-color .2s; line-height: 1; padding: 0; }
+  .calc-btn:hover { background: var(--latte); color: var(--espresso); border-color: var(--latte); }
+  .calc-qty-num { font-size: 14px; color: var(--cream); min-width: 20px; text-align: center; }
+  .calc-summary { margin-top: 20px; padding: 16px; background: rgba(255,255,255,.06); border: 0.5px solid rgba(196,168,130,.3); display: none; }
+  .calc-summary.show { display: block; }
+  .calc-summary-title { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--latte); margin-bottom: 10px; }
+  .calc-summary-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+  .calc-summary-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--cream); }
+  .calc-summary-row.total { border-top: 0.5px solid rgba(196,168,130,.3); padding-top: 10px; margin-top: 4px; font-size: 15px; }
+  .calc-summary-row.prepay { font-size: 12px; color: var(--caramel); margin-top: 2px; }
+  .calc-divider { border: none; border-top: 0.5px solid rgba(196,168,130,.15); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="lang-switch">
+  <button class="lang-btn active" id="btnRu" onclick="setLang('ru')">RU</button>
+  <div class="lang-divider"></div>
+  <button class="lang-btn" id="btnUz" onclick="setLang('uz')">UZ</button>
+</div>
+
+<nav id="navbar">
+  <a href="#" class="nav-logo">VAU</a>
+  <ul class="nav-links">
+    <li><a href="#products" data-ru="Десерты" data-uz="Desertlar">Десерты</a></li>
+    <li><a href="#about" data-ru="О нас" data-uz="Biz haqimizda">О нас</a></li>
+    <li><a href="#process" data-ru="Как заказать" data-uz="Buyurtma qilish">Как заказать</a></li>
+  </ul>
+  <a href="#order" class="nav-order" data-ru="Заказать" data-uz="Buyurtma">Заказать</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag" data-ru="Ташкент · Доставка по городу" data-uz="Toshkent · Shahar bo'ylab yetkazib berish">Ташкент · Доставка по городу</p>
+    <h1 class="hero-title"><span data-ru="Муссовые<br>десерты" data-uz="Mussoviy<br>desertlar">Муссовые<br>десерты</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc" data-ru="Каждый десерт — маленькое произведение искусства. Визуально безупречное, тающее во рту." data-uz="Har bir desert — kichik san'at asari. Vizual jihatdan mukammal, og'izda eriydigan.">Каждый десерт — маленькое произведение искусства. Визуально безупречное, тающее во рту.</p>
+    <div class="hero-cta">
+      <a href="#order" class="btn-primary" data-ru="Оформить заказ" data-uz="Buyurtma berish">Оформить заказ</a>
+      <a href="#products" class="btn-ghost">
+        <span data-ru="Смотреть меню" data-uz="Menuni ko'rish">Смотреть меню</span>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M12 6l4 4-4 4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="hero-badges">
+      <span class="badge" data-ru="Только мусс" data-uz="Faqat muss">Только мусс</span>
+      <span class="badge" data-ru="Ручная работа" data-uz="Qo'l ishi">Ручная работа</span>
+      <span class="badge" data-ru="Доставка" data-uz="Yetkazib berish">Доставка</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-bg-pattern"></div>
+    <div class="hc1"></div><div class="hc2"></div><div class="hc3"></div>
+    <div class="hero-vau">VAU</div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeRu">
+    <span class="marquee-item">Муссовые торты</span><span class="marquee-dot">·</span><span class="marquee-item">Фруктовые десерты</span><span class="marquee-dot">·</span><span class="marquee-item">Зеркальная глазурь</span><span class="marquee-dot">·</span><span class="marquee-item">Велюровое покрытие</span><span class="marquee-dot">·</span><span class="marquee-item">Доставка по Ташкенту</span><span class="marquee-dot">·</span><span class="marquee-item">Муссовые торты</span><span class="marquee-dot">·</span><span class="marquee-item">Фруктовые десерты</span><span class="marquee-dot">·</span><span class="marquee-item">Зеркальная глазурь</span><span class="marquee-dot">·</span><span class="marquee-item">Велюровое покрытие</span><span class="marquee-dot">·</span><span class="marquee-item">Доставка по Ташкенту</span><span class="marquee-dot">·</span>
+  </div>
+  <div class="marquee-track" id="marqueeUz" style="display:none">
+    <span class="marquee-item">Muss tortlar</span><span class="marquee-dot">·</span><span class="marquee-item">Mevali desertlar</span><span class="marquee-dot">·</span><span class="marquee-item">Ko'zguli glazur</span><span class="marquee-dot">·</span><span class="marquee-item">Velur qoplama</span><span class="marquee-dot">·</span><span class="marquee-item">Toshkentga yetkazib berish</span><span class="marquee-dot">·</span><span class="marquee-item">Muss tortlar</span><span class="marquee-dot">·</span><span class="marquee-item">Mevali desertlar</span><span class="marquee-dot">·</span><span class="marquee-item">Ko'zguli glazur</span><span class="marquee-dot">·</span><span class="marquee-item">Velur qoplama</span><span class="marquee-dot">·</span><span class="marquee-item">Toshkentga yetkazib berish</span><span class="marquee-dot">·</span>
+  </div>
+</div>
+
+<section class="products" id="products">
+  <div class="products-header">
+    <div>
+      <p class="section-tag reveal" data-ru="Наше меню" data-uz="Bizning menyu">Наше меню</p>
+      <h2 class="section-title reveal d1"><span data-ru="Десерты &amp; <em>Торты</em>" data-uz="Desertlar &amp; <em>Tortlar</em>">Десерты & <em>Торты</em></span></h2>
+    </div>
+    <a href="#order" class="btn-primary reveal d2" data-ru="Заказать" data-uz="Buyurtma berish">Заказать</a>
+  </div>
+  <div class="products-grid">
+    <div class="product-card reveal">
+      <div class="product-bg"><div class="pc" style="width:220px;height:220px;background:var(--latte)"></div></div>
+      <div class="product-overlay"></div><span class="product-price">50 000 сум</span>
+      <div class="product-info"><div class="product-name" data-ru="Персик" data-uz="Shaftoli">Персик</div><div class="product-flavour" data-ru="Манговый мусс · фисташковый крем" data-uz="Mango mussi · pista kremi">Манговый мусс · фисташковый крем</div></div>
+    </div>
+    <div class="product-card reveal d1">
+      <div class="product-bg"><div class="pc" style="width:200px;height:200px;background:#C8A070"></div><div class="pc" style="position:absolute;width:90px;height:90px;background:#D4B490;top:22%;left:28%"></div></div>
+      <div class="product-overlay"></div><span class="product-price">50 000 сум</span>
+      <div class="product-info"><div class="product-name" data-ru="Апельсин" data-uz="Apelsin">Апельсин</div><div class="product-flavour" data-ru="Цитрусовый мусс · маракуйя" data-uz="Sitrus mussi · marakuya">Цитрусовый мусс · маракуйя</div></div>
+    </div>
+    <div class="product-card reveal d2">
+      <div class="product-bg"><div class="pc" style="width:230px;height:230px;background:#A8B890"></div></div>
+      <div class="product-overlay"></div><span class="product-price">50 000 сум</span>
+      <div class="product-info"><div class="product-name" data-ru="Фисташка" data-uz="Pista">Фисташка</div><div class="product-flavour" data-ru="Фисташковый мусс · малина" data-uz="Pista mussi · malina">Фисташковый мусс · малина</div></div>
+    </div>
+    <div class="product-card reveal d1">
+      <div class="product-bg"><div class="pc" style="width:190px;height:190px;background:#E8C0B8"></div><div class="pc" style="position:absolute;width:80px;height:80px;background:var(--terra);opacity:.5;bottom:28%;right:22%"></div></div>
+      <div class="product-overlay"></div><span class="product-price">50 000 сум</span>
+      <div class="product-info"><div class="product-name" data-ru="Малина" data-uz="Malina">Малина</div><div class="product-flavour" data-ru="Малиновый мусс · ваниль" data-uz="Malina mussi · vanil">Малиновый мусс · ваниль</div></div>
+    </div>
+    <div class="product-card reveal d2">
+      <div class="product-bg"><div class="pc" style="width:250px;height:250px;background:var(--almond)"></div><div class="pc" style="position:absolute;width:110px;height:110px;background:var(--latte);bottom:18%;right:18%;opacity:.7"></div></div>
+      <div class="product-overlay"></div><span class="product-price" data-ru="от 420 000 сум" data-uz="420 000 sumdan">от 420 000 сум</span>
+      <div class="product-info"><div class="product-name" data-ru="Торт муссовый" data-uz="Muss tort">Торт муссовый</div><div class="product-flavour" data-ru="Зеркальная глазурь · на заказ" data-uz="Ko'zguli glazur · buyurtmaga">Зеркальная глазурь · на заказ</div></div>
+    </div>
+    <div class="product-card reveal d3">
+      <div class="product-bg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:28px">
+        <div class="pc" style="width:88px;height:88px;background:var(--latte);margin:auto"></div>
+        <div class="pc" style="width:88px;height:88px;background:#A8B890;margin:auto"></div>
+        <div class="pc" style="width:88px;height:88px;background:#E8C0B8;margin:auto"></div>
+        <div class="pc" style="width:88px;height:88px;background:#C8A070;margin:auto"></div>
+      </div>
+      <div class="product-overlay"></div><span class="product-price">160 000 сум</span>
+      <div class="product-info"><div class="product-name" data-ru="Сет «Фрукты»" data-uz="«Mevalar» seti">Сет «Фрукты»</div><div class="product-flavour" data-ru="4 вкуса · яблоко, груша, апельсин, персик" data-uz="4 ta ta'm · olma, nok, apelsin, shaftoli">4 вкуса · яблоко, груша, апельсин, персик</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div>
+    <p class="section-tag reveal" data-ru="О VAU" data-uz="VAU haqida">О VAU</p>
+    <h2 class="section-title reveal d1"><span data-ru="Только мусс.<br><em>Только лучшее.</em>" data-uz="Faqat muss.<br><em>Faqat eng yaxshisi.</em>">Только мусс.<br><em>Только лучшее.</em></span></h2>
+    <p class="about-desc reveal d2" data-ru="Мы не делаем всё подряд. VAU — единственный в Ташкенте бренд, который специализируется исключительно на муссовых тортах и десертах. Каждое изделие — это часы работы, которые почти не видно." data-uz="Biz hamma narsani yasaymiz deya da'vo qilmaymiz. VAU — Toshkentda faqat muss tortlar va desertlarga ixtisoslashgan yagona brend. Har bir mahsulot — ko'rinmas soatlik mehnat natijasidir.">Мы не делаем всё подряд. VAU — единственный в Ташкенте бренд, который специализируется исключительно на муссовых тортах и десертах.</p>
+    <div class="about-stats reveal d3">
+      <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label" data-ru="Ручная работа" data-uz="Qo'l ishi">Ручная работа</div></div>
+      <div class="stat-item"><div class="stat-num">10+</div><div class="stat-label" data-ru="Лет опыта" data-uz="Yillik tajriba">Лет опыта</div></div>
+      <div class="stat-item"><div class="stat-num">8+</div><div class="stat-label" data-ru="Вкусов в меню" data-uz="Ta'm turi">Вкусов в меню</div></div>
+      <div class="stat-item"><div class="stat-num">1</div><div class="stat-label" data-ru="Специализация" data-uz="Ixtisoslik">Специализация</div></div>
+    </div>
+  </div>
+  <div class="about-visual">
+    <div class="about-ring r1"></div><div class="about-ring r2"></div><div class="about-ring r3"></div>
+    <div class="about-center"><span>VAU</span></div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div>
+    <p class="section-tag reveal" data-ru="Как заказать" data-uz="Qanday buyurtma berish">Как заказать</p>
+    <h2 class="section-title reveal d1"><span data-ru="Просто<br><em>и быстро</em>" data-uz="Oddiy<br><em>va tez</em>">Просто<br><em>и быстро</em></span></h2>
+    <p style="font-size:14px;color:var(--caramel);line-height:1.8;margin-top:16px" class="reveal d2" data-ru="Заказы принимаются еженедельно. Доставка по всему Ташкенту." data-uz="Buyurtmalar har hafta qabul qilinadi. Toshkent bo'ylab yetkazib berish.">Заказы принимаются еженедельно. Доставка по всему Ташкенту.</p>
+  </div>
+  <div class="process-steps reveal d2">
+    <div class="step"><span class="step-num">01</span><div><div class="step-title" data-ru="Выберите десерт" data-uz="Desertni tanlang">Выберите десерт</div><div class="step-desc" data-ru="Откройте меню и выберите вкус — или доверьтесь нам." data-uz="Menuni oching va ta'mni tanlang — yoki bizga ishoning.">Откройте меню и выберите вкус — или доверьтесь нам.</div></div></div>
+    <div class="step"><span class="step-num">02</span><div><div class="step-title" data-ru="Оформите заказ" data-uz="Buyurtma bering">Оформите заказ</div><div class="step-desc" data-ru="Заполните форму на сайте или напишите в Instagram — @vau.uz" data-uz="Saytdagi formani to'ldiring yoki Instagramga yozing — @vau.uz">Заполните форму на сайте или напишите в Instagram — @vau.uz</div></div></div>
+    <div class="step"><span class="step-num">03</span><div><div class="step-title" data-ru="Подтверждение" data-uz="Tasdiqlash">Подтверждение</div><div class="step-desc" data-ru="Мы свяжемся в течение часа и согласуем время доставки." data-uz="Bir soat ichida bog'lanib, yetkazib berish vaqtini kelishib olamiz.">Мы свяжемся в течение часа и согласуем время доставки.</div></div></div>
+    <div class="step"><span class="step-num">04</span><div><div class="step-title" data-ru="Получите и наслаждайтесь" data-uz="Qabul qiling va bahring">Получите и наслаждайтесь</div><div class="step-desc" data-ru="Курьер доставит в удобное время. Десерт готов к подаче." data-uz="Kuryer qulay vaqtda yetkazib beradi. Desert tortiqqa tayyor.">Курьер доставит в удобное время. Десерт готов к подаче.</div></div></div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<div class="order-section" id="order">
+  <div class="order-inner">
+    <p class="section-tag" data-ru="Оформить заказ" data-uz="Buyurtma berish">Оформить заказ</p>
+    <h2 class="section-title"><span data-ru="Заказать <em>сейчас</em>" data-uz="Hozir <em>buyurtma</em>">Заказать <em>сейчас</em></span></h2>
+
+   
+
+    <form id="orderForm">
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label" data-ru="Ваше имя" data-uz="Ismingiz">Ваше имя</label>
+          <input class="form-input" id="f-name" type="text" placeholder="Имя" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-ru="Телефон" data-uz="Telefon">Телефон</label>
+          <input class="form-input" id="f-phone" type="tel" placeholder="+998 __ ___ __ __" required>
+        </div>
+        <div class="form-group full">
+          <span class="form-label" data-ru="Выберите десерты" data-uz="Desertlarni tanlang">Выберите десерты</span>
+          <div class="calc-items">
+            <div class="calc-item" id="ci-peach">
+              <div class="calc-item-info">
+                <div class="calc-item-name" data-ru="Персик" data-uz="Shaftoli">🍑 Персик</div>
+                <div class="calc-item-desc" data-ru="Манговый мусс · фисташковый крем" data-uz="Mango mussi · pista kremi">Манговый мусс · фисташковый крем</div>
+              </div>
+              <span class="calc-item-price">50 000 сум</span>
+              <div class="calc-qty">
+                <button type="button" class="calc-btn" onclick="changeQty('peach',-1)">−</button>
+                <span class="calc-qty-num" id="qty-peach">0</span>
+                <button type="button" class="calc-btn" onclick="changeQty('peach',1)">+</button>
+              </div>
+            </div>
+            <div class="calc-item" id="ci-orange">
+              <div class="calc-item-info">
+                <div class="calc-item-name" data-ru="Апельсин" data-uz="Apelsin">🍊 Апельсин</div>
+                <div class="calc-item-desc" data-ru="Цитрусовый мусс · маракуйя" data-uz="Sitrus mussi · marakuya">Цитрусовый мусс · маракуйя</div>
+              </div>
+              <span class="calc-item-price">50 000 сум</span>
+              <div class="calc-qty">
+                <button type="button" class="calc-btn" onclick="changeQty('orange',-1)">−</button>
+                <span class="calc-qty-num" id="qty-orange">0</span>
+                <button type="button" class="calc-btn" onclick="changeQty('orange',1)">+</button>
+              </div>
+            </div>
+            <div class="calc-item" id="ci-pistachio">
+              <div class="calc-item-info">
+                <div class="calc-item-name" data-ru="Фисташка" data-uz="Pista">🌿 Фисташка</div>
+                <div class="calc-item-desc" data-ru="Фисташковый мусс · малина" data-uz="Pista mussi · malina">Фисташковый мусс · малина</div>
+              </div>
+              <span class="calc-item-price">50 000 сум</span>
+              <div class="calc-qty">
+                <button type="button" class="calc-btn" onclick="changeQty('pistachio',-1)">−</button>
+                <span class="calc-qty-num" id="qty-pistachio">0</span>
+                <button type="button" class="calc-btn" onclick="changeQty('pistachio',1)">+</button>
+              </div>
+            </div>
+            <div class="calc-item" id="ci-raspberry">
+              <div class="calc-item-info">
+                <div class="calc-item-name" data-ru="Малина" data-uz="Malina">🍓 Малина</div>
+                <div class="calc-item-desc" data-ru="Малиновый мусс · ваниль" data-uz="Malina mussi · vanil">Малиновый мусс · ваниль</div>
+              </div>
+              <span class="calc-item-price">50 000 сум</span>
+              <div class="calc-qty">
+                <button type="button" class="calc-btn" onclick="changeQty('raspberry',-1)">−</button>
+                <span class="calc-qty-num" id="qty-raspberry">0</span>
+                <button type="button" class="calc-btn" onclick="changeQty('raspberry',1)">+</button>
+              </div>
+            </div>
+            <div class="calc-item" id="ci-set">
+              <div class="calc-item-info">
+                <div class="calc-item-name" data-ru="Сет «Фрукты»" data-uz="«Mevalar» seti">🎁 Сет «Фрукты»</div>
+                <div class="calc-item-desc" data-ru="4 вкуса: яблоко, груша, апельсин, персик" data-uz="4 ta ta'm: olma, nok, apelsin, shaftoli">4 вкуса: яблоко, груша, апельсин, персик</div>
+              </div>
+              <span class="calc-item-price">160 000 сум</span>
+              <div class="calc-qty">
+                <button type="button" class="calc-btn" onclick="changeQty('set',-1)">−</button>
+                <span class="calc-qty-num" id="qty-set">0</span>
+                <button type="button" class="calc-btn" onclick="changeQty('set',1)">+</button>
+              </div>
+            </div>
+            <div class="calc-item" id="ci-cake">
+              <div class="calc-item-info">
+                <div class="calc-item-name" data-ru="Торт муссовый" data-uz="Muss tort">🎂 Торт муссовый</div>
+                <div class="calc-item-desc" data-ru="Зеркальная глазурь · на заказ" data-uz="Ko'zguli glazur · buyurtmaga">Зеркальная глазурь · на заказ</div>
+              </div>
+              <span class="calc-item-price">420 000 сум</span>
+              <div class="calc-qty">
+                <button type="button" class="calc-btn" onclick="changeQty('cake',-1)">−</button>
+                <span class="calc-qty-num" id="qty-cake">0</span>
+                <button type="button" class="calc-btn" onclick="changeQty('cake',1)">+</button>
+              </div>
+            </div>
+          </div>
+          <!-- Итог корзины -->
+          <div class="calc-summary" id="calcSummary">
+            <div class="calc-summary-title" data-ru="Ваш заказ" data-uz="Buyurtmangiz">Ваш заказ</div>
+            <div class="calc-summary-rows" id="summaryRows"></div>
+            <div class="calc-summary-row total">
+              <span data-ru="Итого" data-uz="Jami">Итого</span>
+              <span id="summaryTotal">0 сум</span>
+            </div>
+            <div class="calc-summary-row prepay">
+              <span data-ru="Предоплата 50%" data-uz="50% oldindan to'lov">Предоплата 50%</span>
+              <span id="summaryPrepay">0 сум</span>
+            </div>
+          </div>
+          <input type="hidden" id="f-product" name="product">
+        </div>
+        <hr class="calc-divider">
+        <div class="form-group">
+          <label class="form-label" data-ru="Дата доставки" data-uz="Yetkazib berish sanasi">Дата доставки</label>
+          <input class="form-input" id="f-date" type="date" required>
+        </div>
+        <div class="form-group full">
+          <label class="form-label" data-ru="Адрес доставки" data-uz="Yetkazib berish manzili">Адрес доставки</label>
+          <input class="form-input" id="f-addr" type="text" placeholder="Улица, дом, квартира" required>
+        </div>
+        <div class="form-group full">
+          <label class="form-label" data-ru="Комментарий" data-uz="Izoh">Комментарий</label>
+          <textarea class="form-textarea" id="f-comment" placeholder="Пожелания, повод, особые требования..."></textarea>
+        </div>
+      </div>
+      <button type="submit" class="form-submit" id="submitBtn">
+        <span data-ru="Отправить заказ" data-uz="Buyurtmani yuborish">Отправить заказ</span>
+      </button>
+      <p class="form-note" data-ru="Мы свяжемся с вами в течение часа для подтверждения" data-uz="Tasdiqlash uchun bir soat ichida bog'lanamiz">Мы свяжемся с вами в течение часа для подтверждения</p>
+    </form>
+
+    <div class="form-status" id="statusSuccess">
+      <div class="status-icon">✦</div>
+      <div class="status-title" data-ru="Заказ принят" data-uz="Buyurtma qabul qilindi">Заказ принят</div>
+      <p class="status-desc" data-ru="Мы свяжемся с вами в течение часа.<br>Спасибо за выбор VAU." data-uz="Bir soat ichida bog'lanamiz.<br>VAU ni tanlaganingiz uchun rahmat.">Мы свяжемся с вами в течение часа.<br>Спасибо за выбор VAU.</p>
+    </div>
+    <div class="form-status status-error" id="statusError">
+      <div class="status-icon">✦</div>
+      <div class="status-title">Заказ получен</div>
+      <p class="status-desc">Уведомление не дошло в Telegram — проверь настройки бота.<br>Мы всё равно получили данные и свяжемся с вами.</p>
+    </div>
+  </div>
+</div>
+
+
+
+<footer>
+  <div>
+    <div class="footer-logo">VAU</div>
+    <div class="footer-tagline" data-ru="Муссовые торты · Ташкент" data-uz="Muss tortlar · Toshkent">Муссовые торты · Ташкент</div>
+  </div>
+  <div class="footer-links">
+    <a href="#products" data-ru="Меню" data-uz="Menyu">Меню</a>
+    <a href="#about" data-ru="О нас" data-uz="Biz haqimizda">О нас</a>
+    <a href="#process" data-ru="Как заказать" data-uz="Qanday buyurtma berish">Как заказать</a>
+    <a href="#order" data-ru="Оформить заказ" data-uz="Buyurtma berish">Оформить заказ</a>
+  </div>
+  <div class="footer-contact">
+    <p>Instagram: <a href="#">@vau.uz</a><br>Telegram: <a href="#">@vau_tashkent</a><br>
+    <span data-ru="Ташкент, доставка по городу" data-uz="Toshkent, shahar bo'ylab yetkazib berish">Ташкент, доставка по городу</span></p>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span data-ru="© 2026 VAU · Муссовые торты и десерты · Ташкент" data-uz="© 2026 VAU · Muss tortlar va desertlar · Toshkent">© 2026 VAU · Муссовые торты и десерты · Ташкент</span>
+</div>
+
+<script>
+  // ─────────────────────────────────────────────
+  // TELEGRAM НАСТРОЙКИ — замени на свои значения
+  const TG_BOT_TOKEN = '8983228507:AAF5XtZp6jp6cyaWhmvTyTMq7o3EnYY5sN0';
+  const TG_CHAT_ID   = '67782256';
+  // ─────────────────────────────────────────────
+
+  // CURSOR
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+    setTimeout(() => { ring.style.left = e.clientX + 'px'; ring.style.top = e.clientY + 'px'; }, 60);
+  });
+
+  // NAV SCROLL
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', scrollY > 40);
+  });
+
+  // REVEAL
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.13 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // DATE MIN
+  const di = document.getElementById('f-date');
+  if (di) di.min = new Date().toISOString().split('T')[0];
+
+  // FORM SUBMIT → TELEGRAM
+  document.getElementById('orderForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.querySelector('span').textContent = currentLang === 'ru' ? 'Отправляем...' : 'Yuborilmoqda...';
+
+    const name    = document.getElementById('f-name').value;
+    const phone   = document.getElementById('f-phone').value;
+    const product = document.getElementById('f-product').value;
+    const date    = document.getElementById('f-date').value;
+    const addr    = document.getElementById('f-addr').value;
+    const comment = document.getElementById('f-comment').value;
+
+    const msg = `🛍 *Новый заказ VAU*\n\n` +
+      `👤 *Имя:* ${name}\n` +
+      `📞 *Телефон:* ${phone}\n` +
+      `🎂 *Заказ:* ${product}\n` +
+      `📅 *Дата доставки:* ${date}\n` +
+      `📍 *Адрес:* ${addr}\n` +
+      `💬 *Комментарий:* ${comment || '—'}\n\n` +
+      `⏰ _${new Date().toLocaleString('ru-RU', {timeZone:'Asia/Tashkent'})}_`;
+
+    try {
+      const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'Markdown' })
+      });
+      const data = await res.json();
+      this.style.display = 'none';
+      if (data.ok) {
+        document.getElementById('statusSuccess').classList.add('show');
+      } else {
+        document.getElementById('statusError').classList.add('show');
+        console.error('TG error:', data);
+      }
+    } catch (err) {
+      this.style.display = 'none';
+      document.getElementById('statusError').classList.add('show');
+      console.error('Fetch error:', err);
+    }
+  });
+
+  // КАЛЬКУЛЯТОР
+  const PRICES = {
+    peach: 50000, orange: 50000, pistachio: 50000,
+    raspberry: 50000, set: 160000, cake: 420000
+  };
+  const NAMES = {
+    peach: 'Персик', orange: 'Апельсин', pistachio: 'Фисташка',
+    raspberry: 'Малина', set: 'Сет «Фрукты»', cake: 'Торт муссовый'
+  };
+  const cart = { peach:0, orange:0, pistachio:0, raspberry:0, set:0, cake:0 };
+
+  function fmtNum(n) { return n.toLocaleString('ru-RU') + ' сум'; }
+
+  function changeQty(id, delta) {
+    cart[id] = Math.max(0, cart[id] + delta);
+    document.getElementById('qty-' + id).textContent = cart[id];
+    const ci = document.getElementById('ci-' + id);
+    if (cart[id] > 0) ci.classList.add('active');
+    else ci.classList.remove('active');
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const rows = document.getElementById('summaryRows');
+    const summary = document.getElementById('calcSummary');
+    let total = 0;
+    let lines = [];
+    let orderParts = [];
+
+    for (const [id, qty] of Object.entries(cart)) {
+      if (qty > 0) {
+        const subtotal = PRICES[id] * qty;
+        total += subtotal;
+        lines.push('<div class="calc-summary-row"><span>' + NAMES[id] + ' × ' + qty + '</span><span>' + fmtNum(subtotal) + '</span></div>');
+        orderParts.push(NAMES[id] + ' × ' + qty);
+      }
+    }
+
+    if (total > 0) {
+      rows.innerHTML = lines.join('');
+      document.getElementById('summaryTotal').textContent = fmtNum(total);
+      document.getElementById('summaryPrepay').textContent = fmtNum(Math.round(total / 2));
+      summary.classList.add('show');
+      // Записываем в скрытое поле для отправки
+      document.getElementById('f-product').value = orderParts.join(', ') + ' | Итого: ' + fmtNum(total);
+    } else {
+      summary.classList.remove('show');
+      document.getElementById('f-product').value = '';
+    }
+  }
+
+  // Валидация — проверяем что выбрано хоть что-то
+  const origSubmit = document.getElementById('orderForm').onsubmit;
+  document.getElementById('orderForm').addEventListener('submit', function(e) {
+    const total = Object.entries(cart).reduce((sum, [id, qty]) => sum + PRICES[id] * qty, 0);
+    if (total === 0) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Подсвечиваем секцию калькулятора
+      document.querySelectorAll('.calc-item').forEach(el => {
+        el.style.borderColor = 'rgba(200,135,122,0.6)';
+        setTimeout(() => el.style.borderColor = '', 2000);
+      });
+      return false;
+    }
+  }, true);
+
+  // LANG SWITCHER
+
+  let currentLang = 'ru';
+  function setLang(lang) {
+    currentLang = lang;
+    document.getElementById('btnRu').classList.toggle('active', lang === 'ru');
+    document.getElementById('btnUz').classList.toggle('active', lang === 'uz');
+    document.getElementById('marqueeRu').style.display = lang === 'ru' ? 'inline-flex' : 'none';
+    document.getElementById('marqueeUz').style.display = lang === 'uz' ? 'inline-flex' : 'none';
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-ru]').forEach(el => {
+      const val = el.getAttribute('data-' + lang);
+      if (!val) return;
+      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') { el.placeholder = val; return; }
+      if (val.includes('<')) { el.innerHTML = val; return; }
+      el.textContent = val;
+    });
+    document.querySelectorAll('select option[data-ru]').forEach(opt => {
+      const val = opt.getAttribute('data-' + lang);
+      if (val) opt.textContent = val;
+    });
+    document.getElementById('f-addr').placeholder = lang === 'ru' ? 'Улица, дом, квартира' : "Ko'cha, uy, xonadon";
+    document.getElementById('f-comment').placeholder = lang === 'ru' ? 'Пожелания, повод, особые требования...' : 'Istaklaringiz, sabab, maxsus talablar...';
+  }
+</script>
+</body>
+</html>
