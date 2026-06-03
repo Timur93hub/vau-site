@@ -598,9 +598,8 @@
 <script>
   // ─────────────────────────────────────────────
   // TELEGRAM НАСТРОЙКИ — замени на свои значения
-  const TG_BOT_TOKEN = '8983228507:AAHiOeeaUIm_iwwNTRl_A90XLMnJzHBDx3k';
+  const TG_BOT_TOKEN = '8983228507:AAF5XtZp6jp6cyaWhmvTyTMq7o3EnYY5sN0';
   const TG_CHAT_ID   = '67782256';
- const TG_GROUP_ID  = '-1003709420549';
   // ─────────────────────────────────────────────
 
   // CURSOR
@@ -650,12 +649,22 @@
       `⏰ _${new Date().toLocaleString('ru-RU', {timeZone:'Asia/Tashkent'})}_`;
 
     try {
+      // Отправляем владельцу
       const res = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat_id: TG_CHAT_ID, text: msg, parse_mode: 'Markdown' })
       });
       const data = await res.json();
+
+      // Отправляем в группу заказов если указана
+      if (TG_GROUP_ID && TG_GROUP_ID !== 'ВСТАВЬ_ID_ГРУППЫ_ЗАКАЗОВ') {
+        await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TG_GROUP_ID, text: msg, parse_mode: 'Markdown' })
+        }).catch(e => console.error('Group send error:', e));
+      }
       this.style.display = 'none';
       if (data.ok) {
         document.getElementById('statusSuccess').classList.add('show');
