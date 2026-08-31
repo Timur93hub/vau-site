@@ -179,45 +179,49 @@
   @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
   @media (max-width:900px) {
-    /* NAV — фиксированная полоска на всю ширину */
+    /* NAV — фиксированная полоска */
     nav {
-      padding: 0 16px;
-      height: 56px;
+      padding: 0 12px;
+      height: 52px;
       background: rgba(250,247,242,0.97);
       backdrop-filter: blur(12px);
       border-bottom: 0.5px solid var(--almond);
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      gap: 0;
     }
-    nav.scrolled { padding: 0 16px; height: 56px; border-bottom: 0.5px solid var(--almond); }
-    .nav-logo { font-size: 22px; letter-spacing: .18em; flex-shrink: 0; }
+    nav.scrolled { background: rgba(250,247,242,0.97); border-bottom: 0.5px solid var(--almond); }
+    .nav-logo { font-size: 20px; letter-spacing: .18em; flex-shrink: 0; }
     .nav-links { display: none; }
 
-    /* LANG SWITCH — фиксированный, виден поверх всего */
+    /* LANG SWITCH — внутри nav, не fixed */
     .lang-switch {
-      position: fixed;
-      top: 50%;
-      right: 100px;
-      transform: translateY(-50%);
-      z-index: 200;
+      position: static;
+      transform: none;
+      top: auto;
+      right: auto;
+      z-index: auto;
       border: 0.5px solid var(--almond);
-      background: rgba(250,247,242,0.97);
+      background: transparent;
+      display: flex;
+      margin-left: auto;
+      margin-right: 8px;
     }
-    .lang-btn { padding: 6px 11px; font-size: 10px; }
+    .lang-btn { padding: 5px 10px; font-size: 10px; }
 
-    /* NAV ORDER — компактная кнопка */
+    /* NAV ORDER — внутри nav, не fixed */
     .nav-order {
-      position: fixed;
-      top: 50%;
-      right: 12px;
-      transform: translateY(-50%);
-      padding: 8px 14px;
+      position: static;
+      transform: none;
+      top: auto;
+      right: auto;
+      padding: 0 12px;
       font-size: 10px;
       letter-spacing: .08em;
       white-space: nowrap;
       flex-shrink: 0;
-      z-index: 200;
+      z-index: auto;
       height: 32px;
       display: flex;
       align-items: center;
